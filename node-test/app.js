@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 
-const fs = require("fs");
+const fs = require("fs/promises");
 
-const content = "Some content!";
-
-fs.writeFile("./fs-test-rename.txt", content, (err) => {
-  if (err) {
-    console.error(err);
+async function example() {
+  try {
+    const content = "Some promise content!";
+    await fs.writeFile("./fs-test-rename.txt", content);
+  } catch (err) {
+    console.log(err);
   }
-});
+}
+
+example();
