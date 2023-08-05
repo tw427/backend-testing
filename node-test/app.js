@@ -2,8 +2,10 @@
 
 const fs = require("fs");
 
-fs.rename("fs-test.txt", "fs-test-rename.txt", (err) => {
+const content = "Some content!";
+
+fs.writeFile("./fs-test-rename.txt", content, (err) => {
   if (err) {
-    return console.error(err);
+    console.error(err);
   }
 });
