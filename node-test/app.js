@@ -1,24 +1,9 @@
 #!/usr/bin/env node
 
-const https = require("https");
+const fs = require("fs");
 
-const options = {
-  hostname: "example.com",
-  port: 443,
-  path: "todos",
-  method: "GET",
-};
-
-const req = https.request(options, (res) => {
-  console.log(`statusCode: ${res.statusCode}`);
-
-  res.on("data", (d) => {
-    process.stdout.write(d);
-  });
+fs.rename("fs-test.txt", "fs-test-rename.txt", (err) => {
+  if (err) {
+    return console.error(err);
+  }
 });
-
-req.on("error", (error) => {
-  console.log(error);
-});
-
-req.end();
