@@ -2,13 +2,26 @@
 
 const fs = require("fs/promises");
 
-async function example() {
+const fileName = "./fs-test-rename.txt";
+
+async function write(content) {
   try {
-    const content = "Some promise content!";
-    await fs.appendFile("./fs-test-rename.txt", content);
+    await fs.writeFile(fileName, content);
   } catch (err) {
     console.log(err);
   }
 }
 
+async function example() {
+  try {
+    const data = await fs.readFile(fileName, {
+      encoding: "utf8",
+    });
+    console.log(data);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+write("I want some new content!");
 example();
