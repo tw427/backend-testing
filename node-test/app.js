@@ -1,27 +1,18 @@
-#!/usr/bin/env node
+const http = require("http");
 
-const fs = require("fs/promises");
+const hostname = "127.0.0.1";
+const port = 8000;
 
-const fileName = "./fs-test-rename.txt";
+// Create HTTP server
+const server = http.createServer(function (req, res) {
+  // Set the response HTTP header with HTTP status and Content type
+  res.writeHead(200, { "Content-Type": "text/plain" });
 
-async function write(content) {
-  try {
-    await fs.writeFile(fileName, content);
-  } catch (err) {
-    console.log(err);
-  }
-}
+  // Send the response body "Hello World"
+  res.end("Hello World\n");
+});
 
-async function example() {
-  try {
-    const data = await fs.readFile(fileName, {
-      encoding: "utf8",
-    });
-    console.log(data);
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-write("I want some new content!");
-example();
+// Prints a log once the server starts listening
+server.listen(port, hostname, function () {
+  console.log(`Sever running at http://${hostname}:${port}`);
+});
