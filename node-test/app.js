@@ -1,6 +1,10 @@
 const express = require("express");
+const uuid = require("uuid");
 
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 let users = {
   1: {
@@ -26,20 +30,13 @@ let messages = {
   },
 };
 
+// Users
 app.get("/users", (req, res) => {
   return res.send(Object.values(users));
 });
 
 app.get("/users/:userId", (req, res) => {
   return res.send(users[req.params.userId]);
-});
-
-app.get("/messages", (req, res) => {
-  return res.send(Object.values(messages));
-});
-
-app.get("/messages/:messageId", (req, res) => {
-  return res.send(messages[req.params.messageId]);
 });
 
 app.post("/users", (req, res) => {
@@ -52,6 +49,27 @@ app.put("/users/:userId", (req, res) => {
 
 app.delete("/users/:userId", (req, res) => {
   return res.send(`DELETE HTTP method on user: ${req.params.userId}`);
+});
+
+// Messages
+app.get("/messages", (req, res) => {
+  return res.send(Object.values(messages));
+});
+
+app.get("/messages/:messageId", (req, res) => {
+  return res.send(messages[req.params.messageId]);
+});
+
+app.post("/messages", (req, res) => {
+  const id = uuid.v4();
+  const message = {
+    id,
+    text: req.body.text,
+  };
+
+  messages[id] = message;
+
+  return res.send(message);
 });
 
 app.listen(3000, () => console.log("server started"));
