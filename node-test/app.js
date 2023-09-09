@@ -77,4 +77,22 @@ app.post("/messages", (req, res) => {
   return res.send(message);
 });
 
+app.delete("/messages/:messageId", (req, res) => {
+  const { [req.params.messageId]: message, ...otherMessages } = messages;
+
+  messages = otherMessages;
+
+  return res.send(message);
+});
+
+app.put("/messages/:messageId", (req, res) => {
+  const updatedMessage = {
+    ...messages[req.params.messageId],
+    text: req.body.text,
+  };
+  messages[req.params.messageId] = updatedMessage;
+
+  return res.send(updatedMessage);
+});
+
 app.listen(3000, () => console.log("server started"));
