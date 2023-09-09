@@ -5,6 +5,10 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+  req.me = users[1];
+  next();
+});
 
 let users = {
   1: {
@@ -65,6 +69,7 @@ app.post("/messages", (req, res) => {
   const message = {
     id,
     text: req.body.text,
+    userId: req.me.id,
   };
 
   messages[id] = message;
