@@ -1,6 +1,6 @@
 const express = require("express");
-const uuid = require("uuid");
 const models = require("../models");
+const routes = require("../routes");
 
 const app = express();
 
@@ -13,67 +13,10 @@ app.use((req, res, next) => {
   };
   next();
 });
-
-// Users
-app.get("/users", (req, res) => {
-  return res.send(Object.values(req.content.models.users));
-});
-
-app.get("/users/:userId", (req, res) => {
-  return res.send(req.context.models.users[req.params.userId]);
-});
-
-app.post("/users", (req, res) => {
-  return res.send("Received a POST HTTP METHOD");
-});
-
-app.put("/users/:userId", (req, res) => {
-  return res.send(`POST HTTP method on user: ${req.params.userId}`);
-});
-
-app.delete("/users/:userId", (req, res) => {
-  return res.send(`DELETE HTTP method on user: ${req.params.userId}`);
-});
-
-// Messages
-app.get("/messages", (req, res) => {
-  return res.send(Object.values(req.context.models.messages));
-});
-
-app.get("/messages/:messageId", (req, res) => {
-  return res.send(req.context.models.messages[req.params.messageId]);
-});
-
-app.post("/messages", (req, res) => {
-  const id = uuid.v4();
-  const message = {
-    id,
-    text: req.body.text,
-    userId: req.context.me.id,
-  };
-
-  req.context.models.messages[id] = message;
-
-  return res.send(message);
-});
-
-app.delete("/messages/:messageId", (req, res) => {
-  const { [req.params.messageId]: message, ...otherMessages } =
-    req.context.models.messages;
-
-  req.context.models.messages = otherMessages;
-
-  return res.send(message);
-});
-
-app.put("/messages/:messageId", (req, res) => {
-  const updatedMessage = {
-    ...messages[req.params.messageId],
-    text: req.body.text,
-  };
-  messages[req.params.messageId] = updatedMessage;
-
-  return res.send(updatedMessage);
-});
+app.use("/users", routes.user);
+app.use("/messages", routes.message);
+app.use("/session", routes.session);
 
 app.listen(3000, () => console.log("server started"));
+
+module.exports = app;
