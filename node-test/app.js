@@ -13,6 +13,16 @@ app.get("/api", (req, res) => {
 });
 
 app.post("/api/posts", verifyToken, (req, res) => {
+  jwt.verify(req.token, "odin", (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      res.json({
+        message: "Post created.",
+        authData,
+      });
+    }
+  });
   res.json({
     message: "Post created...",
   });
@@ -26,7 +36,7 @@ app.post("/api/login", (req, res) => {
     email: "odin@gmail.com",
   };
 
-  jwt.sign({ user: user }, "odin", (err, token) => {
+  jwt.sign({ user: user }, "odin", { expiresIn: "30s" }, (err, token) => {
     res.json({
       token: token,
     });
